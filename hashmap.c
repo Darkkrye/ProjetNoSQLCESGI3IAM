@@ -7,7 +7,6 @@ t_map* map_create(int slots, float lf, float gf) {
     t_map* myMap = (t_map*)malloc(sizeof(t_map));
     myMap->entries = malloc(sizeof(t_map_entry*)*slots);
     for(int i = 0; i < slots; i++) {
-        printf("i : %d\n", i);
         myMap->entries[i] = NULL;
     }
     myMap->slots = slots;
@@ -68,21 +67,15 @@ t_map_entry* map_entry_create(char* key, void* value) {
 void map_put(t_map* map, char* key, void* value) {
     // int slot = hashmap_hashcode(key, map->slots);
     // t_hashmap_entry** entries = &(map->entries[slot]);
-    printf("1\n");
     int slot = map_hashcode(key) % map->slots;
-    printf("%d - %d - %d\n", slot, map_hashcode(key), map->slots);
     t_map_entry** entries = &(map->entries[slot]);
-    printf("2 %s - %s --- %d\n", key, value, slot);
     while (*entries != NULL) {
-        printf("IN\n");
         if (strcmp((*entries)->key, key) == 0) {
-            printf("ON\n");
             (*entries)->value = value;
             return;
         }
         entries = &((*entries)->next);
     }
-    printf("%s - %s\n", key, value);
     (*entries) = map_entry_create(key, value);
     map->size++;
 }
